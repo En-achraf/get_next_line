@@ -8,5 +8,6 @@
 #define BUFFER_SIZE 1024
 
 char *get_next_line(int fd);
+char	*ft_strdup(const char *s1);
 
 #endif
