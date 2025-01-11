@@ -6,7 +6,7 @@
 /*   By: acennadi <acennadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:04:18 by acennadi          #+#    #+#             */
-/*   Updated: 2025/01/10 12:29:45 by acennadi         ###   ########.fr       */
+/*   Updated: 2025/01/11 21:17:47 by acennadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*process_line(char *saved, char *tmp, int sum)
 	line = malloc(len_line + 1);
 	if (!line)
 		return (NULL);
-	ft_strlcpy(line, saved, len_line);
+	ft_strlcpy(line, saved, len_line + 1);
 	return (line);
 }
 
