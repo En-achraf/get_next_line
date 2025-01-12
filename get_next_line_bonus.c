@@ -6,7 +6,7 @@
 /*   By: acennadi <acennadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 00:19:44 by acennadi          #+#    #+#             */
-/*   Updated: 2025/01/12 02:10:24 by acennadi         ###   ########.fr       */
+/*   Updated: 2025/01/12 17:02:38 by acennadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*ft_saved_line(char *str, int fd)
 	return (str);
 }
 
-static char	*process_line(char *saved, char *tmp)
+char	*process_line(char *saved, char *tmp)
 {
 	int		len_line;
 	int		sum;
@@ -54,7 +54,7 @@ static char	*process_line(char *saved, char *tmp)
 	return (line);
 }
 
-static void	handle_remaining(char *tmp, char **saved)
+void	handle_remaining(char *tmp, char **saved)
 {
 	char	*new_saved;
 
