@@ -12,85 +12,87 @@
 
 #include "get_next_line.h"
 
-char	*ft_find_newline(char *str, int *sum)
-{
-	while (*str && *str != '\n')
-	{
-		str++;
-	}
-	if (*str == '\n')
-		*sum = 1;
-	else
-		*sum = 0;
-	return (str);
-}
+char *rm_line(char *saved) {
+    int		i;
+	char	*new_buff;
 
-char	*ft_saved(int fd, char *buffer)
-{
-	int	count;
-
-	count = read(fd, buffer, BUFFER_SIZE);
-	if (count <= 0)
+	i = 0;
+	while (saved[i] && saved[i] != '\n')
+		i++;
+	if (!saved[i])
 	{
-		free(buffer);
+		free(saved);
 		return (NULL);
 	}
-	buffer[count] = '\0';
-	return (buffer);
+	i++;
+	new_buff = ft_strdup(&saved[i]);
+	free(saved);
+	return (new_buff);
 }
 
-char	*process_line(char *saved, char *tmp, int sum)
-{
-	int		len_line;
-	char	*line;
+char *get_line(char *buffer) {
+    int i;
+    char *line;
 
-	len_line = tmp - saved + sum;
-	line = malloc(len_line + 1);
-	if (!line)
-		return (NULL);
-	ft_strlcpy(line, saved, len_line + 1);
-	return (line);
+    i = 0;
+    if(!buffer || !*buffer)
+        return(NULL);
+    while(buffer[i] && buffer[i] != '\n')
+        i++;
+    while(buffer[i] == '\n')
+        i++;
+    line = malloc(i + 1);
+    if(!line)
+        return (NULL);
+    i = 0;
+    while (buffer[i] && buffer[i] != '\n')
+    {
+        line[i] = buffer[i];
+        i++;
+    }
+    if(buffer[i] == '\n') {
+        line[i] = '\n';
+        i++;
+    }
+    line[i] = '\0';
+    return (line);
 }
 
-char	*handle_remaining(char *tmp, char *buffer, char **saved)
-{
-	if (*tmp == '\n')
-		tmp++;
-	if (*tmp)
-	{
-		*saved = ft_strdup(tmp);
-		free(buffer);
-	}
-	else
-	{
-		free(*saved);
-		*saved = NULL;
-	}
-	return (*saved);
+char *get_saved(char *saved, int fd) {
+    char *buffer;
+    ssize_t count;
+
+    buffer = malloc(BUFFER_SIZE + (size_t)1);
+    count = 1;
+    if(!buffer)
+        return (NULL);
+    while(count > 0 && !ft_findchr(buffer, '\n')) {
+        count = read(fd, buffer, BUFFER_SIZE);
+        if(count == -1) {
+            free(buffer);
+            free(saved);
+            return (NULL);
+        }
+    buffer[count] = '\0';
+    saved = ft_strjoin(saved, buffer);
+    }
+    free(buffer);
+    return (saved);
 }
 
-char	*get_next_line(int fd)
-{
-	static char	*saved;
-	char		*buffer;
-	int			sum;
-	char		*tmp;
-	char		*line;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
-		return (NULL);
-	if (!saved)
-	{
-		buffer = malloc(BUFFER_SIZE + (size_t)1);
-		if (!buffer)
-			return (NULL);
-		saved = ft_saved(fd, buffer);
-	}
-	if (!saved)
-		return (NULL);
-	tmp = ft_find_newline(saved, &sum);
-	line = process_line(saved, tmp, sum);
-	buffer = saved;
-	handle_remaining(tmp, buffer, &saved);
-	return (line);
+char *get_next_line(int fd) {
+    static char *saved;
+    char *line;
+
+    if(fd < 0 || BUFFER_SIZE <= 0)
+        return (NULL);
+    saved = get_saved(saved, fd);
+    if(!saved)
+        return (NULL);
+    line = get_line(saved);
+    if(!line)
+        return (NULL);
+    saved = rm_line(saved);
+    return (line);
 }
