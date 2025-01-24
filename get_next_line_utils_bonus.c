@@ -6,7 +6,7 @@
 /*   By: acennadi <acennadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:31:49 by acennadi          #+#    #+#             */
-/*   Updated: 2025/01/12 17:02:28 by acennadi         ###   ########.fr       */
+/*   Updated: 2025/01/24 11:33:07 by acennadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,17 @@ int	ft_findchr(char *s, int c)
 	return (0);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char const *s2)
 {
 	char	*str;
 
 	if (!s1)
 		s1 = ft_strdup("");
-
 	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!str)
 		return (NULL);
-	ft_strlcpy(str, s1, ft_strlen(s1) + 1);	
+	ft_strlcpy(str, s1, ft_strlen(s1) + 1);
 	ft_strlcpy((str + ft_strlen(s1)), (s2), (ft_strlen(s2) + 1));
+	free(s1);
 	return (str);
 }
